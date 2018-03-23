@@ -10,7 +10,8 @@ class InterfaceContainer extends Component {
   state = {
     frequency: 100,
     type: "",
-    pause: false
+    pause: false,
+    shapeSpeed: null
   }
 
   stopSound = () => {
@@ -32,17 +33,25 @@ class InterfaceContainer extends Component {
 
     console.log(sound)
   }
+handleSliderOne = (e) =>{
+  let num = e*10
+  sound.frequency.value = num
+  this.setState({
+    frequency: num,
+    shapeSpeed: e
+  })
 
+}
 
   render(){
     return(
       <Grid celled='internally'>
         <Grid.Row>
-          <Grid.Column width={5}>
-            <ControlPanelContainer handleSound={this.createSound} handlePause={this.stopSound} />
+          <Grid.Column width={5} >
+            <ControlPanelContainer handleSound={this.createSound} handleSliderOne={this.handleSliderOne} handlePause={this.stopSound} />
           </Grid.Column>
           <Grid.Column width={10}>
-            {this.state.type ? <ShapeContainer type={this.state.type}/> : null}
+            {this.state.type ? <ShapeContainer shapeSpeed={this.state.shapeSpeed} type={this.state.type} /> : null}
           </Grid.Column>
         </Grid.Row>
       </Grid>

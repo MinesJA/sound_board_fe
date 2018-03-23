@@ -17,7 +17,7 @@ class InputCard extends Component {
       return (
         <Card>
           <Card.Content>
-            <SliderBar />
+            <SliderBar handleSliderOne={this.props.handleSliderOne} />
           </Card.Content>
         </Card>
       )
