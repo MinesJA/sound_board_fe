@@ -13,7 +13,6 @@ class InterfaceContainer extends Component {
     pause: false
   }
 
-
   stopSound = () => {
     sound.stop()
   }
@@ -37,14 +36,21 @@ class InterfaceContainer extends Component {
 
   render(){
     return(
-      <div>
-
-      <ControlPanelContainer handleSound={this.createSound} handlePause={this.stopSound} />
-      <ShapeContainer />
-
-      </div>
+      <Grid celled='internally'>
+        <Grid.Row>
+          <Grid.Column width={5}>
+            <ControlPanelContainer handleSound={this.createSound} handlePause={this.stopSound} />
+          </Grid.Column>
+          <Grid.Column width={10}>
+            {this.state.type ? <ShapeContainer type={this.state.type}/> : null}
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
     )
   }
 }
+
+
+
 
 export default InterfaceContainer

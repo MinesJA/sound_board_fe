@@ -4,13 +4,15 @@
   "private": true,
   "dependencies": {
     "rc-slider": "^8.6.1",
-    "react": "^16.2.0",
+    "react": "^15.6.1",
     "react-canvas-knob": "^0.5.0",
-    "react-dom": "^16.2.0",
+    "react-dom": "^15.6.1",
     "react-rangeslider": "^2.2.0",
     "react-scripts": "1.1.1",
+    "react-three-renderer": "^3.2.4",
     "semantic-ui-css": "^2.3.1",
-    "semantic-ui-react": "^0.79.0"
+    "semantic-ui-react": "^0.79.0",
+    "three": "^0.86.0"
   },
   "scripts": {
     "start": "react-scripts start",
