@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Button, Card, Image } from 'semantic-ui-react'
+import InterfaceContainer from './Containers/InterfaceContainer'
 
 import './App.css';
 
@@ -10,19 +12,9 @@ class App extends Component {
 
 
   render() {
-    let context = new AudioContext();
-    let sound = context.createOscillator();
-
-    sound.frequency.value = 100
-    sound.connect(context.destination)
-    sound.type = 'triangle'
-
-    console.log(sound)
-
     return (
       <div>
-        
-
+        <InterfaceContainer />
       </div>
     );
   }
