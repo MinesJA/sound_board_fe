@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Slider from 'react-rangeslider'
 
-class SliderBar extends Component {
+class FrequencySlider extends Component {
   constructor (props, context) {
     super(props, context)
     this.state = {
@@ -13,18 +13,18 @@ class SliderBar extends Component {
     this.setState({
       vertical: value
     })
-    this.props.handleSliderOne(value)
+    // this.props.handleSliderOne(value)
   };
 
   render () {
     const { vertical } = this.state
 
-    const verticalLabels = {
-      10: 'Getting started',
-      50: 'Half way',
-      90: 'Almost done',
-      100: 'Complete!'
-    }
+    // const verticalLabels = {
+    //   10: 'Getting started',
+    //   50: 'Half way',
+    //   90: 'Almost done',
+    //   100: 'Complete!'
+    // }
 
     const formatkg = value => value + ' kg'
     const formatPc = p => p + '%'
@@ -39,9 +39,10 @@ class SliderBar extends Component {
           onChange={this.handleChangeVertical}
         />
         <div className='value'>{formatPc(vertical)}</div>
+        <div>Frequency</div>
       </div>
     )
   }
 }
 
-export default SliderBar
+export default FrequencySlider

@@ -1,25 +1,39 @@
 import React, { Component } from 'react'
-import { Button, Card } from 'semantic-ui-react'
-
+import { Button, Card, Grid } from 'semantic-ui-react'
 import Slider, { Range } from 'rc-slider';
-import ButtonComp from './Inputs/ButtonComp'
-import SliderBar from './Inputs/SliderBar'
+import DetuneSlider from './Inputs/DetuneSlider'
+import FrequencySlider from './Inputs/FrequencySlider'
+import GainSlider from './Inputs/GainSlider'
 
+import ButtonComp from './Inputs/ButtonComp'
 
 
 class InputCard extends Component {
 
 
-  buildSliderOrButton = () => {
+  buildComponents = () => {
     switch(this.props.inputType){
 
-      case "SliderBar":
+      case "FreqDetuneSliders":
       return (
-        <Card>
-          <Card.Content>
-            <SliderBar handleSliderOne={this.props.handleSliderOne} />
-          </Card.Content>
-        </Card>
+        <Grid textAlign='center' columns={2}>
+          <Grid.Column>
+            <DetuneSlider />
+          </Grid.Column>
+          <Grid.Column>
+            <FrequencySlider />
+          </Grid.Column>
+        </Grid>
+      )
+      break;
+
+      case "GainSlider":
+      return(
+        <Grid textAlign='center' columns={1}>
+          <Grid.Column>
+            <GainSlider handleSound={this.props.handleSound} handlePause={this.props.handlePause}/>
+          </Grid.Column>
+        </Grid>
       )
       break;
 
@@ -40,7 +54,7 @@ class InputCard extends Component {
   render(){
     return(
       <div>
-        {this.buildSliderOrButton()}
+      {this.buildComponents()}
       </div>
     )
   }

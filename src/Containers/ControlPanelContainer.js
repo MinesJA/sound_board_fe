@@ -1,22 +1,33 @@
 import React, { Component } from 'react'
-import { Button, Card, Image } from 'semantic-ui-react'
+import { Button, Card, Image, Grid } from 'semantic-ui-react'
 
-import InputCard from '../InputCard'
-import SliderBar from '../Inputs/SliderBar'
-import ButtonComp from '../Inputs/ButtonComp'
+import FrequencySlider from '../Inputs/FrequencySlider'
+import DetuneSlider from '../Inputs/DetuneSlider'
+import OscTypeButton from '../Inputs/OscTypeButton'
+import GainSlider from '../Inputs/GainSlider'
 
 class ControlPanelContainer extends Component {
 
 
   render(){
     return(
-      <div>
-
-        <InputCard inputType={"Button"} handleSound={this.props.handleSound} handlePause={this.props.handlePause}/>
-        <InputCard handleSliderOne={this.props.handleSliderOne}inputType="SliderBar" />
-        <InputCard inputType="SliderBar" />
-
-      </div>
+    <Grid columns={1} >
+      <Grid.Row>
+        <Grid.Column>
+          <OscTypeButton handleSound={this.props.handleSound} handlePause={this.props.handlePause}/>
+        </Grid.Column>
+      </Grid.Row>
+      <Grid.Row>
+        <Grid.Column>
+          <FreqDetuneSliders handleSound={this.props.handleSound} handlePause={this.props.handlePause}/>
+        </Grid.Column>
+      </Grid.Row>
+      <Grid.Row >
+        <Grid.Column>
+          <GainSlider handleSound={this.props.handleSound} handlePause={this.props.handlePause}/>
+        </Grid.Column>
+      </Grid.Row>
+    </Grid>
     )
   }
 }

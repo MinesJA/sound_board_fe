@@ -33,7 +33,7 @@ class InterfaceContainer extends Component {
 
     console.log(sound)
   }
-handleSliderOne = (e) =>{
+  handleSliderOne = (e) =>{
   let num = e*10
   sound.frequency.value = num
   this.setState({
