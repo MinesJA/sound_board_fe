@@ -13,6 +13,7 @@ class SliderBar extends Component {
     this.setState({
       vertical: value
     })
+    this.props.handleSliderOne(value)
   };
 
   render () {

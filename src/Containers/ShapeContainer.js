@@ -12,15 +12,15 @@ class ShapeContainer extends Component {
     switch(this.props.type){
 
       case "triangle":
-        return(<PyramidShape />)
+        return(<PyramidShape shapeSpeed={this.props.shapeSpeed} />)
       break;
 
       case "sine":
-        return(<TorusShape />)
+        return(<TorusShape shapeSpeed={this.props.shapeSpeed}/>)
       break;
 
       case "sawtooth":
-        return(<ConeShape />)
+        return(<ConeShape shapeSpeed={this.props.shapeSpeed}/>)
       break;
 
       default:

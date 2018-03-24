@@ -13,7 +13,7 @@ class ControlPanelContainer extends Component {
       <div>
 
         <InputCard inputType={"Button"} handleSound={this.props.handleSound} handlePause={this.props.handlePause}/>
-        <InputCard inputType="SliderBar" />
+        <InputCard handleSliderOne={this.props.handleSliderOne}inputType="SliderBar" />
         <InputCard inputType="SliderBar" />
 
       </div>
