@@ -33,6 +33,10 @@ class InterfaceContainer extends Component {
     console.log(sound)
   }
 
+  changeFrequency = () => {
+    
+  }
+
 
   render(){
     return(

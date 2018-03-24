@@ -57,8 +57,8 @@ class PyramidShape extends React.Component {
           rotation={this.state.pyramidRotation}
         >
           <octahedronGeometry
-            radius={2}
-            detail={0}
+            radius={2.25}
+            detail={1}
           />
           <meshBasicMaterial
             color={0x00ff00}
