@@ -39,7 +39,7 @@ class GainSlider extends Component {
           onChange={this.handleChangeVertical}
         />
         <div className='value'>{formatPc(vertical)}</div>
-        <div>Detune</div>
+        <div>Gain</div>
       </div>
     )
   }

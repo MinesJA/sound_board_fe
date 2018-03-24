@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Button, Card, Grid } from 'semantic-ui-react'
 import Slider, { Range } from 'rc-slider';
 import DetuneSlider from './Inputs/DetuneSlider'
-import FrequencySlider from './Inputs/FrequencySlider'
+import FreqDetuneSliders from './Inputs/FreqDetuneSliders'
 import GainSlider from './Inputs/GainSlider'
 
 import ButtonComp from './Inputs/ButtonComp'
@@ -16,14 +16,7 @@ class InputCard extends Component {
 
       case "FreqDetuneSliders":
       return (
-        <Grid textAlign='center' columns={2}>
-          <Grid.Column>
-            <DetuneSlider />
-          </Grid.Column>
-          <Grid.Column>
-            <FrequencySlider />
-          </Grid.Column>
-        </Grid>
+
       )
       break;
 

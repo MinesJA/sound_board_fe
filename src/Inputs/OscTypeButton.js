@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import { Button } from 'semantic-ui-react'
+import { Button, Grid } from 'semantic-ui-react'
+
 
 class ButtonComp extends Component {
   state = {
 
   }
-
 
   handleTriangleClick = () => {
     console.log("Triangle clicked")
@@ -29,23 +29,19 @@ class ButtonComp extends Component {
   }
 
 
-
-
   render(){
     return(
-      <div>
-        <Button.Group>
-          <Button icon='pause' onClick={this.handlePauseClick} />
-        </Button.Group>
-
-        <Button.Group>
-          <Button onClick={this.handleTriangleClick}>Triangle</Button>
-          <Button.Or />
-          <Button onClick={this.handleSineClick}>Sine</Button>
-          <Button.Or />
-          <Button onClick={this.handleSawtoothClick}>Flattooth</Button>
-        </Button.Group>
-      </div>
+      <Grid textAlign='center' columns={1}>
+        <Grid.Column>
+            <Button.Group>
+              <Button onClick={this.handleTriangleClick}>Triangle</Button>
+              <Button.Or />
+              <Button onClick={this.handleSineClick}>Sine</Button>
+              <Button.Or />
+              <Button onClick={this.handleSawtoothClick}>Flattooth</Button>
+            </Button.Group>
+        </Grid.Column>
+      </Grid>
     )
   }
 }
