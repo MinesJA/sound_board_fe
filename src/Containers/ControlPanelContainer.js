@@ -4,13 +4,19 @@ import SetSoundsButton from '../Components/Inputs/SetSoundsButton'
 // import PlayButton from '../Components/Inputs/PlayButton'
 import OscTypeButton from '../Components/Inputs/OscTypeButton'
 import FreqDetuneSliders from '../Components/Inputs/FreqDetuneSliders'
-import GainSlider from '../Components/Inputs/GainSlider'
+import DistortionSlider from '../Components/Inputs/DistortionSlider'
 import LowMidHighKnobs from '../Components/Inputs/LowMidHighKnobs'
 import OscChoice from '../Components/OscChoice'
 
 // Having a hard time with the play / pause buttons.
 // Will play but won't pause. May have something to with the dot notation
 //  used in SetSoundsButton
+
+// May be able to use gainNode to pause
+// (set gain on gainNode to 0 on pause, on play reset to state value of gain)
+
+// Having a bigger issues with toggles turning back to their initial state when I
+// change anything (see pause and distortion states with booleans)
 
 
 class ControlPanelContainer extends Component {
@@ -21,7 +27,9 @@ class ControlPanelContainer extends Component {
     frequency: 100,
     gain: 100,
     paused: true,
-
+    distortionOn: false,
+    distortionNode: "",
+    distortion: 0,
   }
 
   chooseType = (type) => {
@@ -35,19 +43,18 @@ class ControlPanelContainer extends Component {
     let context = this.props.context
     this.setState({
       pause: false,
-      sound: this.props.context.createOscillator(),
-      gain:
+      sound: context.createOscillator(),
+      gainNode: context.createGain(),
     }, ()=>{
 
       let sound = this.state.sound
-
+      let gainNode = this.state.gainNode
 
       sound.type = this.state.type
       sound.frequency.value = this.state.frequency;
 
       sound.start()
 
-      let gainNode = context.createGain();
       gainNode.gain.value = this.state.gain;
       sound.connect(gainNode)
       gainNode.connect(context.destination)
@@ -86,11 +93,11 @@ class ControlPanelContainer extends Component {
 
   handleGainSlider = (e) => {
     if(this.state.sound){
-      let sound = this.state.sound
+      let gainNode = this.state.gainNode
 
       console.log(e)
 
-      sound.gain.value = e
+      gainNode.gain.value = e
       this.setState({
         gain: e,
         shapeX: e
@@ -98,10 +105,59 @@ class ControlPanelContainer extends Component {
     }
   }
 
+  toggleDistortion = (e) => {
+    e.preventDefault()
+    let context = this.props.context
+    let distortionNode = context.createWaveShaper()
+    let distortionOn = !this.state.distortionOn
+    distortionNode.curve = this.makeDistortionCurve(400);
+    distortionNode.oversample = '4x';
 
+    this.setState({
+      distortionOn: distortionOn,
+      distortionNode: distortionNode,
+    }, ()=>{console.log("DistortionNode: ",this.state.distortionNode)})
+  }
+
+
+  handleDistortionChange = (e) => {
+
+    console.log(this.state.sound, this.state.distortionOn)
+
+    if(this.state.sound){
+      console.log(e)
+      let distortionNode = this.state.distortionNode
+      
+      distortionNode.curve = this.makeDistortionCurve(e);
+
+
+    }
+
+
+  }
+
+  makeDistortionCurve = (amount) => {
+    var k = typeof amount === 'number' ? amount : 50,
+      n_samples = 44100,
+      curve = new Float32Array(n_samples),
+      deg = Math.PI / 180,
+      i = 0,
+      x;
+    for ( ; i < n_samples; ++i ) {
+      x = i * 2 / n_samples - 1;
+      curve[i] = ( 3 + k ) * x * 20 * deg / ( Math.PI + k * Math.abs(x) );
+    }
+    console.log(curve)
+    return curve;
+
+  }
+
+
+
+
+// RENDERING INPUTS
 
   buildPlayPause = () => {
-
     if(this.state.type){
       if(this.state.paused){
         return <SetSoundsButton.PlayButton playSound={this.playSound} />
@@ -141,7 +197,7 @@ class ControlPanelContainer extends Component {
       </Grid.Row>
       <Grid.Row >
         <Grid.Column>
-          <GainSlider handleSound={this.props.handleSound} handlePause={this.props.handlePause}/>
+          <DistortionSlider turnOnDistortion={this.toggleDistortion} handleDistortionChange={this.handleDistortionChange}/>
         </Grid.Column>
       </Grid.Row>
       <Grid.Row>
