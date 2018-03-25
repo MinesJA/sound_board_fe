@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 import { Button, Grid } from 'semantic-ui-react'
 
-class PlayButton extends Component {
-
-
+class PauseButton extends Component {
 
 
   render(){
@@ -19,4 +17,4 @@ class PlayButton extends Component {
   }
 }
 
-export default PlayButton
+export default PauseButton

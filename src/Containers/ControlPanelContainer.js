@@ -1,28 +1,33 @@
 import React, { Component } from 'react'
 import { Button, Card, Image, Grid } from 'semantic-ui-react'
 
-import FreqDetuneSliders from '../Inputs/FreqDetuneSliders'
-import DetuneSlider from '../Inputs/DetuneSlider'
+import PauseButton from '../Inputs/PauseButton'
 import OscTypeButton from '../Inputs/OscTypeButton'
+import FreqDetuneSliders from '../Inputs/FreqDetuneSliders'
 import GainSlider from '../Inputs/GainSlider'
-import PlayButton from '../Inputs/PlayButton'
 import LowMidHighKnobs from '../Inputs/LowMidHighKnobs'
 
 
 class ControlPanelContainer extends Component {
+  
+  state = {
+    sound: this.props.context.createOscillator()
+  }
 
+
+  sound = this.props.context.createOscillator()
 
   render(){
     return(
     <Grid columns={1} >
       <Grid.Row>
         <Grid.Column>
-          <PlayButton handleSound={this.props.handleSound} handlePause={this.props.handlePause}/>
+          <PauseButton handleSound={this.props.handleSound} handlePause={this.props.handlePause}/>
         </Grid.Column>
       </Grid.Row>
       <Grid.Row>
         <Grid.Column>
-          <OscTypeButton handleSound={this.props.handleSound} handlePause={this.props.handlePause}/>
+          <OscTypeButton handleSound={this.props.handleSound}/>
         </Grid.Column>
       </Grid.Row>
       <Grid.Row>

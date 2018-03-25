@@ -1,48 +1,51 @@
 import React, { Component } from 'react'
 import { Grid, Image } from 'semantic-ui-react'
-import ControlPanelContainer from './ControlPanelContainer'
 import ShapeContainer from './ShapeContainer'
 import BoardPanesContainer from './BoardPanesContainer'
 
-let context = new AudioContext()
-let sound = context.createOscillator()
+// let context = new AudioContext()
+// let sound = context.createOscillator()
 
 class InterfaceContainer extends Component {
   state = {
     frequency: 100,
     type: "",
     pause: false,
-    shapeSpeed: null
-  }
-
-  stopSound = () => {
-    sound.stop()
-  }
-
-  createSound = (type) => {
-      this.setState({
-        type
-      }, ()=>{this.startSound()})
+    shapeSpeed: null,
+    context: new AudioContext(),
   }
 
 
-  startSound = () => {
-    sound.frequency.value = this.state.frequency;
-    sound.connect(context.destination)
-    sound.type = this.state.type
-    sound.start()
+  //
+  // stopSound = () => {
+  //   sound.stop()
+  // }
+  //
+  // startSound = (type) => {
+  //     this.setState({
+  //       type
+  //     }, ()=>{this.startSound()})
+  // }
 
-    console.log(sound)
-  }
-  handleSliderOne = (e) =>{
-  let num = e*10
-  sound.frequency.value = num
-  this.setState({
-    frequency: num,
-    shapeSpeed: e
-  })
-
-}
+//
+//   startSound = () => {
+//     sound.frequency.value = this.state.frequency;
+//     sound.connect(context.destination)
+//     sound.type = this.state.type
+//     sound.start()
+//
+//     console.log(sound)
+//   }
+//
+//   handleSliderOne = (e) =>{
+//   let num = e*10
+//   sound.frequency.value = num
+//   this.setState({
+//     frequency: num,
+//     shapeSpeed: e
+//   })
+//
+// }
 
   render(){
     return(
@@ -50,10 +53,13 @@ class InterfaceContainer extends Component {
         <Grid.Row>
           <Grid.Column width={5} >
 
-            <BoardPanesContainer />
+            <BoardPanesContainer handleSound = {this.handleSound} context = {this.state.context}/>
+
           </Grid.Column>
           <Grid.Column width={10}>
+
             {this.state.type ? <ShapeContainer shapeSpeed={this.state.shapeSpeed} type={this.state.type} /> : null}
+
           </Grid.Column>
         </Grid.Row>
       </Grid>
