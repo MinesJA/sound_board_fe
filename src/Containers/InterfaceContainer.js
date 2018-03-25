@@ -8,7 +8,7 @@ import BoardPanesContainer from './BoardPanesContainer'
 
 class InterfaceContainer extends Component {
   state = {
-    frequency: 100,
+    
     type: "",
     pause: false,
     shapeSpeed: null,
@@ -16,36 +16,7 @@ class InterfaceContainer extends Component {
   }
 
 
-  //
-  // stopSound = () => {
-  //   sound.stop()
-  // }
-  //
-  // startSound = (type) => {
-  //     this.setState({
-  //       type
-  //     }, ()=>{this.startSound()})
-  // }
 
-//
-//   startSound = () => {
-//     sound.frequency.value = this.state.frequency;
-//     sound.connect(context.destination)
-//     sound.type = this.state.type
-//     sound.start()
-//
-//     console.log(sound)
-//   }
-//
-//   handleSliderOne = (e) =>{
-//   let num = e*10
-//   sound.frequency.value = num
-//   this.setState({
-//     frequency: num,
-//     shapeSpeed: e
-//   })
-//
-// }
 
   render(){
     return(

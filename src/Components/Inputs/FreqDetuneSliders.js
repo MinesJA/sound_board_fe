@@ -7,7 +7,7 @@ class FrequencySlider extends Component {
     super(props, context)
     this.state = {
       frequency: 50,
-      detune: 50
+      gain: 50
     }
   }
 
@@ -15,13 +15,14 @@ class FrequencySlider extends Component {
     this.setState({
       frequency: value
     })
-    // this.props.handleSliderOne(value)
+    this.props.changeFrequency(value)
   };
 
-  handleChangeDetune = value => {
+  handleChangeGain = value => {
     this.setState({
-      detune: value
+      gain: value
     })
+    this.props.changeGain(value)
   }
 
   render () {
@@ -55,14 +56,14 @@ class FrequencySlider extends Component {
         <Grid.Column>
           <div className='slider custom-labels'>
             <Slider
-              value={this.state.detune}
+              value={this.state.gain}
               orientation='vertical'
               format={formatPc}
 
-              onChange={this.handleChangeDetune}
+              onChange={this.handleChangeGain}
             />
-            <div className='value'>{formatPc(this.state.detune)}</div>
-            <div>Detune</div>
+          <div className='value'>{formatPc(this.state.gain)}</div>
+            <div>Gain</div>
           </div>
         </Grid.Column>
       </Grid>

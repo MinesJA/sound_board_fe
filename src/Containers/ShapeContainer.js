@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import React3 from 'react-three-renderer';
 import * as THREE from 'three';
-import ConeShape from '../ConeShape'
-import PyramidShape from '../PyramidShape'
-import TorusShape from '../TorusShape'
+import ConeShape from '../Components/Shapes/ConeShape'
+import PyramidShape from '../Components/Shapes/PyramidShape'
+import TorusShape from '../Components/Shapes/TorusShape'
 
 class ShapeContainer extends Component {
 
