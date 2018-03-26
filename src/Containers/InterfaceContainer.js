@@ -20,7 +20,7 @@ class InterfaceContainer extends Component {
   }
 
 
-  }
+
 
 handleSoundShape = (type) =>{
   this.setState({
