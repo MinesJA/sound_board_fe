@@ -22,10 +22,10 @@ class PyramidShape extends React.Component {
       // pretend pyramidRotation is immutable.
       // this helps with updates and pure rendering.
       // React will be sure that the rotation has now updated.
-      let rotate = this.props.shapeSpeed/100
+      let rotate = this.props.shapeSpeed/400
       this.setState({
         pyramidRotation: new THREE.Euler(
-          this.state.pyramidRotation.x + rotate,
+          this.state.pyramidRotation.x + 0.1,
           this.state.pyramidRotation.y + rotate,
           0
         ),
@@ -34,6 +34,7 @@ class PyramidShape extends React.Component {
   }
 
   render() {
+    let radius = this.props.shapeSpeed/400
     const width = window.innerWidth * 0.75; // canvas width
     const height = window.innerHeight * 0.75; // canvas height
 
@@ -58,11 +59,12 @@ class PyramidShape extends React.Component {
           rotation={this.state.pyramidRotation}
         >
           <octahedronGeometry
-            radius={2.25}
-            detail={1}
+            radius={2}
+            detail={0}
           />
           <meshBasicMaterial
-            color={0x00ff00}
+            wireframe={true}
+            color={0x12F8FF}
           />
         </mesh>
       </scene>
