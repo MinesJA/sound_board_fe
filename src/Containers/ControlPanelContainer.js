@@ -1,8 +1,5 @@
 import React, { Component } from 'react'
 import { Button, Card, Image, Grid } from 'semantic-ui-react'
-// import SetSoundsButton from '../Components/Inputs/SetSoundsButton'
-// import PlayButton from '../Components/Inputs/PlayButton'
-// import LowMidHighKnobs from '../Components/Inputs/LowMidHighKnobs'
 import OscTypeButton from '../Components/Inputs/OscTypeButton'
 import FreqDetuneSliders from '../Components/Inputs/FreqDetuneSliders'
 import DistortionSlider from '../Components/Inputs/DistortionSlider'
@@ -12,6 +9,9 @@ import OscChoice from '../Components/OscChoice'
 import Sound from '../Sound.js'
 const uuidv1 = require('uuid/v1'); // uuidv1();
 
+// import SetSoundsButton from '../Components/Inputs/SetSoundsButton'
+// import PlayButton from '../Components/Inputs/PlayButton'
+// import LowMidHighKnobs from '../Components/Inputs/LowMidHighKnobs'
 // Having a bigger issues with toggles turning back to their initial state when I
 // change anything (see pause and distortion states with booleans)
 

@@ -40,12 +40,21 @@ class BoardPanesContainer extends Component {
       (obj)=>{
         return { menuItem: `${obj.name}`, render: () =>
         <Tab.Pane>
-          <ControlPanelContainer key={uuidv1()} values={obj} context={this.state.context}/>
+          <ControlPanelContainer
+            key={uuidv1()}
+            values={obj}
+            context={this.state.context}
+            newFrequency={props.newFrequency}
+            handleSliderSpeed={props.handleSliderSpeed}
+            sendSoundShape={props.handleSoundShape}
+            chooseType={props.chooseType}
+            />
         </Tab.Pane>
         }
       }
     )
   }
+
 
   handleChange = (value) => {
     this.setState({
