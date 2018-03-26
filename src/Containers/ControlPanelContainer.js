@@ -7,6 +7,7 @@ import FreqDetuneSliders from '../Components/Inputs/FreqDetuneSliders'
 import DistortionSlider from '../Components/Inputs/DistortionSlider'
 import LowMidHighKnobs from '../Components/Inputs/LowMidHighKnobs'
 import OscChoice from '../Components/OscChoice'
+import ShapeContainer from './ShapeContainer'
 
 // Having a hard time with the play / pause buttons.
 // Will play but won't pause. May have something to with the dot notation
@@ -31,6 +32,8 @@ class ControlPanelContainer extends Component {
     distortionNode: "",
     distortion: 0,
   }
+
+
 
   chooseType = (type) => {
     this.setState({
@@ -63,6 +66,7 @@ class ControlPanelContainer extends Component {
 
       console.log("Play-Pause state:",this.state.paused, "Type state:",this.state.type)
     })
+    this.props.sendSoundShape(this.state.type)
   }
 
   pauseSound = (event) => {
@@ -89,6 +93,8 @@ class ControlPanelContainer extends Component {
         shapeY: num
       }, ()=>{console.log(this.state.frequency)})
     }
+    // this.props.sendSound(this.state.type,this.state.frequency)
+    this.props.handleSliderSpeed(this.state.frequency)
   }
 
   handleGainSlider = (e) => {
@@ -165,9 +171,24 @@ class ControlPanelContainer extends Component {
     }
   }
 
+  componentWillReceiveProps(){
+
+    // console.log(this.state.sound.frequency)
+    // //    sound.frequency.value = fr
+    // if(this.state.sound){
+    //    let sound = this.state.sound
+    //    let fr = this.props.newFrequency
+    //    sound.frequency.value = fr
+    //    this.setState({
+    //      frequency: fr
+    //    })
+    // }
+  }
+
   render(){
+
     return(
-    <Grid columns={1} >
+    <Grid celled="internally" >
       <Grid.Row>
         <Grid.Column>
 
@@ -183,7 +204,6 @@ class ControlPanelContainer extends Component {
             :
             <OscTypeButton chooseType={this.chooseType}/>
           }
-
         </Grid.Column>
       </Grid.Row>
       <Grid.Row>
@@ -202,6 +222,7 @@ class ControlPanelContainer extends Component {
         </Grid.Column>
       </Grid.Row>
     </Grid>
+
     )
   }
 }

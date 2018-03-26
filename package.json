@@ -10,6 +10,7 @@
     "react-rangeslider": "^2.2.0",
     "react-scripts": "1.1.1",
     "react-three-renderer": "^3.2.4",
+    "react-touch-knob": "^0.2.3",
     "semantic-ui-css": "^2.3.1",
     "semantic-ui-react": "^0.79.0",
     "three": "^0.86.0"
