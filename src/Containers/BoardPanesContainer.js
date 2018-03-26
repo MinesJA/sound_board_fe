@@ -53,7 +53,7 @@ class BoardPanesContainer extends Component {
     })
   }
 
-  handleInput = (e) => {
+  handleSubmit = (e) => {
     e.preventDefault()
 
     let obj =  {
