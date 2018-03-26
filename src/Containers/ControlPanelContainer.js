@@ -1,164 +1,134 @@
 import React, { Component } from 'react'
 import { Button, Card, Image, Grid } from 'semantic-ui-react'
-import SetSoundsButton from '../Components/Inputs/SetSoundsButton'
+// import SetSoundsButton from '../Components/Inputs/SetSoundsButton'
 // import PlayButton from '../Components/Inputs/PlayButton'
+// import LowMidHighKnobs from '../Components/Inputs/LowMidHighKnobs'
 import OscTypeButton from '../Components/Inputs/OscTypeButton'
 import FreqDetuneSliders from '../Components/Inputs/FreqDetuneSliders'
 import DistortionSlider from '../Components/Inputs/DistortionSlider'
-import LowMidHighKnobs from '../Components/Inputs/LowMidHighKnobs'
+import PlayButton from '../Components/Inputs/PlayPauseReset/PlayButton'
+import PauseButton from '../Components/Inputs/PlayPauseReset/PauseButton'
 import OscChoice from '../Components/OscChoice'
-
-// Having a hard time with the play / pause buttons.
-// Will play but won't pause. May have something to with the dot notation
-//  used in SetSoundsButton
-
-// May be able to use gainNode to pause
-// (set gain on gainNode to 0 on pause, on play reset to state value of gain)
+import Sound from '../Sound.js'
+const uuidv1 = require('uuid/v1'); // uuidv1();
 
 // Having a bigger issues with toggles turning back to their initial state when I
 // change anything (see pause and distortion states with booleans)
 
-
 class ControlPanelContainer extends Component {
-  state = {
-    sound: "",
-    gainNode: "",
-    type: "",
-    frequency: 100,
-    gain: 100,
-    paused: true,
-    distortionOn: false,
-    distortionNode: "",
-    distortion: 0,
+  constructor(props){
+    super(props);
+
+    this.state = {
+      sound: "",
+      type: props.values.type,
+      frequency: props.values.frequency,
+      gain: props.values.gain,
+      distortion: props.values.distortion,
+      paused: true,
+      // highPass: 800,
+      // lowPass: 880,
+      // highShelf: 4700,
+      // lowShelf: 35,
+    }
   }
 
   chooseType = (type) => {
+    console.log("Control - Type Choice: ", type)
+
     this.setState({
-      type,
-      paused: false
+      type: type,
     }, ()=>{this.playSound()})
   }
 
-  playSound = (event) => {
+
+  playSound = () => {
+    console.log("Control - Hit play")
     let context = this.props.context
+    let sound = new Sound(context)
+    let now = context.currentTime;
+
+    sound.play(this.state.type, this.state.frequency)
+
+    let paused = !this.state.paused
+
     this.setState({
-      pause: false,
-      sound: context.createOscillator(),
-      gainNode: context.createGain(),
-    }, ()=>{
-
-      let sound = this.state.sound
-      let gainNode = this.state.gainNode
-
-      sound.type = this.state.type
-      sound.frequency.value = this.state.frequency;
-
-      sound.start()
-
-      gainNode.gain.value = this.state.gain;
-      sound.connect(gainNode)
-      gainNode.connect(context.destination)
-
-      // context -> gainNode -> sound
-
-      console.log("Play-Pause state:",this.state.paused, "Type state:",this.state.type)
-    })
+      paused: paused,
+      sound: sound,
+    }, ()=>{console.log("Control - Play hit. Pause state: ",this.state.paused, "Type state:",this.state.type)})
   }
 
-  pauseSound = (event) => {
+  pauseSound = () => {
+    console.log("Control - Hit pause")
     let sound = this.state.sound
-    sound.stop()
-    sound.disconnect()
+    let context = this.props.context
+    let now = context.currentTime
+    sound.stop(now)
+
+    let paused = !this.state.paused
 
     this.setState({
       sound: "",
-      paused: true
-    }, ()=>{console.log("Pause-Pause state:",this.state.paused, "Type state:",this.state.type)})
+      paused: paused
+    }, ()=>{console.log("Control - Pause hit. Pause state: ",this.state.paused, "Type state:",this.state.type)})
   }
 
 
-  handleFreqSlider = (e) => {
-    if(this.state.sound){
-      let sound = this.state.sound
-      let num = e*10
-      console.log(num)
+// SLIDERS ---------->
 
-      sound.frequency.value = num
-      this.setState({
-        frequency: num,
-        shapeY: num
-      }, ()=>{console.log(this.state.frequency)})
+  handleFreqSlider = (e) => {
+    console.log("Control - Gain Slider: ", e)
+    this.setState({
+      frequency: e
+    })
+
+    if(this.state.sound){
+      let num = e * 5
+      let sound = this.state.sound
+
+      sound.changeFreqVal(num)
     }
   }
 
   handleGainSlider = (e) => {
-    if(this.state.sound){
-      let gainNode = this.state.gainNode
-
-      console.log(e)
-
-      gainNode.gain.value = e
-      this.setState({
-        gain: e,
-        shapeX: e
-      }, ()=>{console.log(this.state.gain)})
-    }
-  }
-
-  toggleDistortion = (e) => {
-    e.preventDefault()
-    let context = this.props.context
-    let distortionNode = context.createWaveShaper()
-    let distortionOn = !this.state.distortionOn
-    distortionNode.curve = this.makeDistortionCurve(400);
-    distortionNode.oversample = '4x';
-
+    console.log("Control - Gain Slider: ", e)
     this.setState({
-      distortionOn: distortionOn,
-      distortionNode: distortionNode,
-    }, ()=>{console.log("DistortionNode: ",this.state.distortionNode)})
-  }
-
-
-  handleDistortionChange = (e) => {
-
-    console.log(this.state.sound, this.state.distortionOn)
+      gain: e
+    })
 
     if(this.state.sound){
-      console.log(e)
-      let distortionNode = this.state.distortionNode
+      let num = e/25
+      let sound = this.state.sound
 
-      distortionNode.curve = this.makeDistortionCurve(e);
+      sound.changeGainVal(num)
     }
   }
 
-  makeDistortionCurve = (amount) => {
-    var k = typeof amount === 'number' ? amount : 50,
-      n_samples = 44100,
-      curve = new Float32Array(n_samples),
-      deg = Math.PI / 180,
-      i = 0,
-      x;
-    for ( ; i < n_samples; ++i ) {
-      x = i * 2 / n_samples - 1;
-      curve[i] = ( 3 + k ) * x * 20 * deg / ( Math.PI + k * Math.abs(x) );
-    }
-    console.log(curve)
-    return curve;
+  handleDistSlider = (e) => {
+    console.log("Control - Dist Slider: ", e)
+    this.setState({
+      distortion: e
+    })
 
+    if(this.state.sound){
+      let sound = this.state.sound
+      let num = e
+
+      sound.changeDistVal(num)
+    }
   }
 
 
 
 
-// RENDERING INPUTS
+// RENDERING INPUTS --------------->
 
   buildPlayPause = () => {
     if(this.state.type){
       if(this.state.paused){
-        return <SetSoundsButton.PlayButton playSound={this.playSound} />
+        return <PlayButton playSound={this.playSound} />
       } else {
-        return <SetSoundsButton.PauseButton pauseSound={this.pauseSound} />
+        return <PauseButton pauseSound={this.pauseSound} />
       }
     } else {
       return null
@@ -188,17 +158,28 @@ class ControlPanelContainer extends Component {
       </Grid.Row>
       <Grid.Row>
         <Grid.Column>
-          <FreqDetuneSliders changeFrequency={this.handleFreqSlider} changeGain={this.handleGainSlider}/>
+
+          <FreqDetuneSliders
+            changeFrequency={this.handleFreqSlider}
+            changeGain={this.handleGainSlider}
+            frequency={this.state.frequency}
+            gain={this.state.gain}/>
+
         </Grid.Column>
       </Grid.Row>
       <Grid.Row >
         <Grid.Column>
-          <DistortionSlider turnOnDistortion={this.toggleDistortion} handleDistortionChange={this.handleDistortionChange}/>
+
+          <DistortionSlider
+            changeDistortion={this.handleDistSlider}
+            distortion={this.state.distortion}
+            />
+
         </Grid.Column>
       </Grid.Row>
       <Grid.Row>
         <Grid.Column>
-          <LowMidHighKnobs />
+
         </Grid.Column>
       </Grid.Row>
     </Grid>
@@ -207,3 +188,63 @@ class ControlPanelContainer extends Component {
 }
 
 export default ControlPanelContainer
+
+
+// handleLowPassKnob = (num) => {
+//   if(this.state.sound){
+//     let sound = this.state.sound
+//     let type = "lowPass"
+//
+//     console.log("LowPass Slider Num: ", num)
+//
+//     sound.changeLowPassVal(num)
+//
+//     this.setState({
+//       lowPass: num
+//     }, ()=>{console.log("LowPass val: ", this.state.lowPass)})
+//   }
+// }
+//
+// handleHighPassKnob = (num) => {
+//   if(this.state.sound){
+//     let sound = this.state.sound
+//     let type = "highPass"
+//
+//     console.log("HighPass Slider Num: ", num)
+//
+//     sound.changeHighPassVal(num)
+//
+//     this.setState({
+//       highPass: num
+//     }, ()=>{console.log("HighPass val: ", this.state.highPass)})
+//   }
+// }
+//
+// handleLowShelfKnob = (num) => {
+//   if(this.state.sound){
+//     let sound = this.state.sound
+//     let type = "lowShelf"
+//
+//     console.log("LowShelf Slider Num: ", num)
+//
+//     sound.changeLowShelfVal(num)
+//
+//     this.setState({
+//       lowShelf: num
+//     }, ()=>{console.log("LowShelf val: ", this.state.lowShelf)})
+//   }
+// }
+//
+// handleHighShelfKnob = (num) => {
+//   if(this.state.sound){
+//     let sound = this.state.sound
+//
+//     console.log("HighShelf Slider Num: ", num)
+//
+//     sound.changeHighShelfVal(num)
+//
+//     this.setState({
+//       highShelf: num
+//     }, ()=>{console.log("HighShelf val: ", this.state.highShelf)})
+//   }
+// }

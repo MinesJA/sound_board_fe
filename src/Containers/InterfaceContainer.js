@@ -8,13 +8,10 @@ import BoardPanesContainer from './BoardPanesContainer'
 
 class InterfaceContainer extends Component {
   state = {
-    
-    type: "",
     pause: false,
     shapeSpeed: null,
-    context: new AudioContext(),
-  }
 
+  }
 
 
 
