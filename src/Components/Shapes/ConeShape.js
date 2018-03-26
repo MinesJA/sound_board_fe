@@ -8,7 +8,7 @@ class ConeShape extends React.Component {
 
     // construct the position vector here, because if we use 'new' within render,
     // React will think that things have changed when they have not.
-    this.cameraPosition = new THREE.Vector3(0, 0, 5);
+    this.cameraPosition = new THREE.Vector3(0, 0, 125);
 
     this.state = {
       coneRotation: new THREE.Euler(),
@@ -22,8 +22,8 @@ class ConeShape extends React.Component {
       // React will be sure that the rotation has now updated.
       this.setState({
         coneRotation: new THREE.Euler(
-          this.state.coneRotation.x + 0.1,
-          this.state.coneRotation.y + 0.1,
+          this.state.coneRotation.x + 0.01,
+          this.state.coneRotation.y + 0.01,
           0
         ),
       });
@@ -33,7 +33,7 @@ class ConeShape extends React.Component {
   render() {
     const width = window.innerWidth * 0.75; // canvas width
     const height = window.innerHeight * 0.75; // canvas height
-
+let depth = this.props.shapeSpeed/10
     return (<React3
       mainCamera="camera" // this points to the perspectiveCamera which has the name set to "camera" below
       width={width}
@@ -54,12 +54,13 @@ class ConeShape extends React.Component {
         <mesh
           rotation={this.state.coneRotation}
         >
-          <boxGeometry
-            width={1}
-            height={1}
-            depth={1}
-          />
+        <sphereGeometry
+             radius={depth}
+             widthSegments={20}
+             heightSegments={10}
+           />
           <meshBasicMaterial
+            wireframe={true}
             color={0x00ff00}
           />
         </mesh>

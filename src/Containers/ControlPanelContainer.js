@@ -9,8 +9,10 @@ import DistortionSlider from '../Components/Inputs/DistortionSlider'
 import PlayButton from '../Components/Inputs/PlayPauseReset/PlayButton'
 import PauseButton from '../Components/Inputs/PlayPauseReset/PauseButton'
 import OscChoice from '../Components/OscChoice'
+
 import Sound from '../Sound.js'
 const uuidv1 = require('uuid/v1'); // uuidv1();
+
 
 // Having a bigger issues with toggles turning back to their initial state when I
 // change anything (see pause and distortion states with booleans)
@@ -33,6 +35,8 @@ class ControlPanelContainer extends Component {
     }
   }
 
+
+
   chooseType = (type) => {
     console.log("Control - Type Choice: ", type)
 
@@ -52,11 +56,14 @@ class ControlPanelContainer extends Component {
 
     let paused = !this.state.paused
 
+
     this.setState({
       paused: paused,
       sound: sound,
     }, ()=>{console.log("Control - Play hit. Pause state: ",this.state.paused, "Type state:",this.state.type)})
-  }
+
+    this.props.sendSoundShape(this.state.type)
+    }
 
   pauseSound = () => {
     console.log("Control - Hit pause")
@@ -88,6 +95,8 @@ class ControlPanelContainer extends Component {
 
       sound.changeFreqVal(num)
     }
+    // this.props.sendSound(this.state.type,this.state.frequency)
+    this.props.handleSliderSpeed(this.state.frequency)
   }
 
   handleGainSlider = (e) => {
@@ -135,9 +144,24 @@ class ControlPanelContainer extends Component {
     }
   }
 
+  componentWillReceiveProps(){
+
+    // console.log(this.state.sound.frequency)
+    // //    sound.frequency.value = fr
+    // if(this.state.sound){
+    //    let sound = this.state.sound
+    //    let fr = this.props.newFrequency
+    //    sound.frequency.value = fr
+    //    this.setState({
+    //      frequency: fr
+    //    })
+    // }
+  }
+
   render(){
+
     return(
-    <Grid columns={1} >
+    <Grid celled="internally" >
       <Grid.Row>
         <Grid.Column>
 
@@ -153,7 +177,6 @@ class ControlPanelContainer extends Component {
             :
             <OscTypeButton chooseType={this.chooseType}/>
           }
-
         </Grid.Column>
       </Grid.Row>
       <Grid.Row>
@@ -183,6 +206,7 @@ class ControlPanelContainer extends Component {
         </Grid.Column>
       </Grid.Row>
     </Grid>
+
     )
   }
 }

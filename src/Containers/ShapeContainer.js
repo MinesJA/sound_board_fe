@@ -7,12 +7,16 @@ import TorusShape from '../Components/Shapes/TorusShape'
 
 class ShapeContainer extends Component {
 
+  handleClick = (e) => {
+    this.props.handleShapeClick(e)
+  }
+
   setShape = () => {
     console.log(this.props.type)
     switch(this.props.type){
 
       case "triangle":
-        return(<PyramidShape shapeSpeed={this.props.shapeSpeed} />)
+        return(<PyramidShape onClick={this.handleClick} shapeSpeed={this.props.shapeSpeed} />)
       break;
 
       case "sine":
@@ -28,9 +32,10 @@ class ShapeContainer extends Component {
     }
   }
 
+
   render() {
     return (
-      <div>
+      <div onClick={this.handleClick}>
       {this.setShape()}
       </div>
     )

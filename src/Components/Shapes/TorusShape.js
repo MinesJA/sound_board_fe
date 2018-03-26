@@ -8,7 +8,7 @@ class TorusShape extends Component {
 
     // construct the position vector here, because if we use 'new' within render,
     // React will think that things have changed when they have not.
-    this.cameraPosition = new THREE.Vector3(0, 0, 5);
+    this.cameraPosition = new THREE.Vector3(0, 0, 60);
 
     this.state = {
       torusRotation: new THREE.Euler(),
@@ -20,10 +20,11 @@ class TorusShape extends Component {
       // pretend torusRotation is immutable.
       // this helps with updates and pure rendering.
       // React will be sure that the rotation has now updated.
+      let rotate = this.props.shapeSpeed/300
       this.setState({
         torusRotation: new THREE.Euler(
-          this.state.torusRotation.x + 0.1,
-          this.state.torusRotation.y + 0.1,
+          this.state.torusRotation.x + rotate,
+          this.state.torusRotation.y + rotate,
           0
         ),
       });
@@ -44,23 +45,25 @@ class TorusShape extends Component {
       <scene>
         <perspectiveCamera
           name="camera"
-          fov={75}
+          fov={45}
           aspect={width / height}
           near={0.1}
-          far={1000}
+          far={2000}
 
           position={this.cameraPosition}
         />
         <mesh
           rotation={this.state.torusRotation}
         >
-          <boxGeometry
-            width={1}
-            height={1}
-            depth={1}
+          <torusGeometry
+            radius={9}
+            tube={3}
+            radialSegments={3}
+            tubularSegments={3}
           />
           <meshBasicMaterial
-            color={0x00ff00}
+
+            color={0xEBEE35}
           />
         </mesh>
       </scene>

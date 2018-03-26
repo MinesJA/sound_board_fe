@@ -6,8 +6,8 @@ class FrequencySlider extends Component {
   constructor (props, context) {
     super(props, context)
     this.state = {
-      frequency: props.frequency,
-      gain: props.gain
+      frequency: 50,
+      gain: 50
     }
   }
 
@@ -26,8 +26,16 @@ class FrequencySlider extends Component {
   }
 
   render () {
+    // const { vertical } = this.state
 
-    const { frequency, gain } = this.state
+    // const verticalLabels = {
+    //   10: 'Getting started',
+    //   50: 'Half way',
+    //   90: 'Almost done',
+    //   100: 'Complete!'
+    // }
+
+    const formatkg = value => value + ' kg'
     const formatPc = p => p + '%'
 
     return (
@@ -35,8 +43,9 @@ class FrequencySlider extends Component {
         <Grid.Column>
           <div className='slider custom-labels'>
             <Slider
-              value={frequency}
+              value={this.state.frequency}
               orientation='vertical'
+              format={formatPc}
 
               onChange={this.handleChangeFrequency}
             />
@@ -47,8 +56,9 @@ class FrequencySlider extends Component {
         <Grid.Column>
           <div className='slider custom-labels'>
             <Slider
-              value={gain}
+              value={this.state.gain}
               orientation='vertical'
+              format={formatPc}
 
               onChange={this.handleChangeGain}
             />

@@ -1,92 +1,21 @@
-import React, { Component } from 'react'
-import { Tab, Button, Input, Form } from 'semantic-ui-react'
+import React from 'react'
+import { Tab } from 'semantic-ui-react'
 import ControlPanelContainer from './ControlPanelContainer'
-const uuidv1 = require('uuid/v1'); // use like => uuidv1();
 
 
-class BoardPanesContainer extends Component {
-  state = {
-    conext: new (window.AudioContext || window.webkitAudioContext)(),
-    tempName: "",
-    controlObjs: [
-      {
-        name: "First Sound",
-        type: 'sine',
-        frequency: 25,
-        gain: 25,
-        distortion: 0,
-      },
-      {
-        name: "Second Sound",
-        type: 'sine',
-        frequency: 15,
-        gain: 32,
-        distortion: 28,
-      },
-      {
-        name: "Third Sound",
-        type: 'sawtooth',
-        frequency: 50,
-        gain: 47,
-        distortion: 15,
-      }
-    ]
-  }
 
 
-  buildControlPanels = () => {
-    console.log("BoardPanes - buildingControlPanels: ")
-    return this.state.controlObjs.map(
-      (obj)=>{
-        return { menuItem: `${obj.name}`, render: () =>
-        <Tab.Pane>
-          <ControlPanelContainer key={uuidv1()} values={obj} context={this.state.context}/>
-        </Tab.Pane>
-        }
-      }
-    )
-  }
+const BoardPanesContainer = (props) => {
 
-  handleChange = (value) => {
-    this.setState({
-      tempName: value
-    })
-  }
+  let panes = [
+    { menuItem: 'Board', render: () => <ControlPanelContainer newFrequency={props.newFrequency} handleSliderSpeed={props.handleSliderSpeed} sendSoundShape={props.handleSoundShape} chooseType={props.chooseType} context = {props.context}/> },
+    { menuItem: '+', render: () => <Tab.Pane>Tab 2 Content</Tab.Pane> },
+    { menuItem: 'Tab 3', render: () => <Tab.Pane>Tab 3 Content</Tab.Pane> },
+  ]
 
-  handleSubmit = (e) => {
-    e.preventDefault()
-
-    let obj =  {
-                name: this.state.tempName,
-                type: "",
-                frequency: 50,
-                gain: 50,
-                distortion: 0,
-               }
-
-    let panelsArray = [...this.state.controlObjs, obj]
-
-    this.setState({
-      controlObjs: panelsArray
-    })
-  }
-
-
-  render(){
-    return(
-      <div>
-        <Tab panes={this.buildControlPanels()}  />
-        <Form>
-          <Form.Group>
-            <Input onChange={this.handleChange} placeholder='New Control Panel Name' />
-            <Button onClick={this.handleSubmit} size={"small"}>Add New Control Panel</Button>
-          </Form.Group>
-        </Form>
-
-      </div>
-    )
-  }
-
+  return(
+    <Tab panes={panes} />
+  )
 
 }
 
