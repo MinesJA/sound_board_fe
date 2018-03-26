@@ -127,13 +127,9 @@ class ControlPanelContainer extends Component {
     if(this.state.sound){
       console.log(e)
       let distortionNode = this.state.distortionNode
-      
+
       distortionNode.curve = this.makeDistortionCurve(e);
-
-
     }
-
-
   }
 
   makeDistortionCurve = (amount) => {
