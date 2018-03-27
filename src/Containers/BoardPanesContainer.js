@@ -6,30 +6,33 @@ const uuidv1 = require('uuid/v1'); // use like => uuidv1();
 
 class BoardPanesContainer extends Component {
   state = {
-    conext: new (window.AudioContext || window.webkitAudioContext)(),
-    tempName: "",
+    context: new (window.AudioContext || window.webkitAudioContext)(),
+    counter: 4,
     controlObjs: [
       {
-        name: "First Sound",
+        name: 1,
         type: 'sine',
         frequency: 25,
         gain: 25,
         distortion: 0,
+        paused: true
       },
       {
-        name: "Second Sound",
+        name: 2,
         type: 'sine',
         frequency: 15,
         gain: 32,
         distortion: 28,
+        paused: true
       },
       {
-        name: "Third Sound",
+        name: 3,
         type: 'sawtooth',
         frequency: 50,
         gain: 47,
         distortion: 15,
-      }
+        paused: true
+      },
     ]
   }
 
@@ -39,45 +42,55 @@ class BoardPanesContainer extends Component {
     return this.state.controlObjs.map(
       (obj)=>{
         return { menuItem: `${obj.name}`, render: () =>
-        <Tab.Pane>
-          <ControlPanelContainer
-            key={uuidv1()}
-            values={obj}
-            context={this.state.context}
-            newFrequency={props.newFrequency}
-            handleSliderSpeed={props.handleSliderSpeed}
-            sendSoundShape={props.handleSoundShape}
-            chooseType={props.chooseType}
-            />
-        </Tab.Pane>
+                  <Tab.Pane>
+                    <ControlPanelContainer
+                      key={uuidv1()}
+                      values={obj}
+                      context={this.state.context}
+                      updateControlObjs = {this.updateControlObjs}
+
+
+
+                      newFrequency={this.props.newFrequency}
+                      handleSliderSpeed={this.props.handleSliderSpeed}
+                      sendSoundShape={this.props.handleSoundShape}
+                      chooseType={this.props.chooseType}
+                      />
+                  </Tab.Pane>
         }
       }
     )
   }
 
+  updateControlObjs = (contObj) => {
+    let controlArray = [...this.state.controlObjs]
 
-  handleChange = (value) => {
-    this.setState({
-      tempName: value
-    })
+
+
+
+
+
   }
 
-  handleSubmit = (e) => {
+
+  addPanel = (e) => {
     e.preventDefault()
 
-    let obj =  {
-                name: this.state.tempName,
+    let counter = this.state.counter + 1
+
+    let obj =  {name: counter,
                 type: "",
                 frequency: 50,
                 gain: 50,
-                distortion: 0,
-               }
+                distortion: 0}
 
-    let panelsArray = [...this.state.controlObjs, obj]
+    let panelsArray = [...this.state.controlObjs]
+    panelsArray.push(obj)
 
     this.setState({
-      controlObjs: panelsArray
-    })
+      controlObjs: panelsArray,
+      counter: counter
+    }, ()=>{console.log("Current ControlPanels Array: ", this.state.panelsArray)})
   }
 
 
@@ -85,13 +98,7 @@ class BoardPanesContainer extends Component {
     return(
       <div>
         <Tab panes={this.buildControlPanels()}  />
-        <Form>
-          <Form.Group>
-            <Input onChange={this.handleChange} placeholder='New Control Panel Name' />
-            <Button onClick={this.handleSubmit} size={"small"}>Add New Control Panel</Button>
-          </Form.Group>
-        </Form>
-
+        <Button onClick={this.addPanel} size={"small"} renderActiveOnly={false}>Add New Control Panel</Button>
       </div>
     )
   }

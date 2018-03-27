@@ -10,7 +10,6 @@ import OscChoice from '../Components/OscChoice'
 import Sound from '../Sound.js'
 const uuidv1 = require('uuid/v1'); // uuidv1();
 
-
 // import SetSoundsButton from '../Components/Inputs/SetSoundsButton'
 // import PlayButton from '../Components/Inputs/PlayButton'
 // import LowMidHighKnobs from '../Components/Inputs/LowMidHighKnobs'
@@ -23,6 +22,7 @@ class ControlPanelContainer extends Component {
     super(props);
 
     this.state = {
+      name: props.values.name,
       sound: "",
       type: props.values.type,
       frequency: props.values.frequency,
@@ -36,10 +36,14 @@ class ControlPanelContainer extends Component {
     }
   }
 
+  componentDidMount = () => {
+    console.log(this.state)
+  }
+
 
 
   chooseType = (type) => {
-    console.log("Control - Type Choice: ", type)
+    console.log("1. ControlPanel - Type Choice: ", type)
 
     this.setState({
       type: type,
@@ -48,7 +52,7 @@ class ControlPanelContainer extends Component {
 
 
   playSound = () => {
-    console.log("Control - Hit play")
+    console.log("ControlPanel - Hit play")
     let context = this.props.context
     let sound = new Sound(context)
     let now = context.currentTime;
@@ -57,14 +61,11 @@ class ControlPanelContainer extends Component {
 
     let paused = !this.state.paused
 
-
     this.setState({
       paused: paused,
-      sound: sound,
-    }, ()=>{console.log("Control - Play hit. Pause state: ",this.state.paused, "Type state:",this.state.type)})
-
-    this.props.sendSoundShape(this.state.type)
-    }
+      sound: sound
+    }, ()=>{console.log("Control - Play hit. Pause state: ", this.state.paused, "Type state:", this.state.type)})
+  }
 
   pauseSound = () => {
     console.log("Control - Hit pause")
@@ -97,7 +98,7 @@ class ControlPanelContainer extends Component {
       sound.changeFreqVal(num)
     }
     // this.props.sendSound(this.state.type,this.state.frequency)
-    this.props.handleSliderSpeed(this.state.frequency)
+    // this.props.handleSliderSpeed(this.state.frequency)
   }
 
   handleGainSlider = (e) => {
@@ -145,21 +146,10 @@ class ControlPanelContainer extends Component {
     }
   }
 
-  componentWillReceiveProps(){
-
-    // console.log(this.state.sound.frequency)
-    // //    sound.frequency.value = fr
-    // if(this.state.sound){
-    //    let sound = this.state.sound
-    //    let fr = this.props.newFrequency
-    //    sound.frequency.value = fr
-    //    this.setState({
-    //      frequency: fr
-    //    })
-    // }
-  }
-
   render(){
+    console.log("Control Panel: ", this.state.name, "RENDERED")
+
+    this.props.updateControlObjs(this.state)
 
     return(
     <Grid celled="internally" >

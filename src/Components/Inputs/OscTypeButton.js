@@ -5,7 +5,7 @@ import { Button, Grid } from 'semantic-ui-react'
 const OscTypeButton = (props) => {
 
   const handleClick = (e) => {
-    console.log(e.target.name, " clicked")
+    console.log("OscType - clicked type: ", e.target.name)
     props.chooseType(e.target.name)
   }
 
