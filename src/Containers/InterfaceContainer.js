@@ -8,15 +8,10 @@ import BoardPanesContainer from './BoardPanesContainer'
 
 class InterfaceContainer extends Component {
   state = {
-
-    pause: false,
     shapeSpeed: null,
-
-
-    type: "",
     pause: false,
     shapeSpeed: 100,
-    context: new AudioContext(),
+    typex: ""
   }
 
 
@@ -24,7 +19,7 @@ class InterfaceContainer extends Component {
 
 handleSoundShape = (type) =>{
   this.setState({
-    type: type,
+    typex: type,
   })
 }
 
@@ -47,12 +42,25 @@ handleShapeClick = (e) => {
         <Grid.Row>
           <Grid.Column width={5} >
 
-            <BoardPanesContainer clickedFrequency={this.state.shapeSpeed} handleSoundShape={this.handleSoundShape} handleSliderSpeed={this.handleSliderSpeed} context = {this.state.context}/>
+            <BoardPanesContainer
+              clickedFrequency = {this.state.shapeSpeed}
+              handleSoundShape = {this.handleSoundShape}
+              handleSliderSpeed = {this.handleSliderSpeed}
+              context = {this.state.context}
+            />
 
           </Grid.Column>
           <Grid.Column width={10}>
 
-            {this.state.type ? <ShapeContainer shapeSpeed={this.state.shapeSpeed} type={this.state.type} handleShapeClick={this.handleShapeClick} /> : null}
+            {this.state.type ?
+
+              <ShapeContainer
+                shapeSpeed={this.state.shapeSpeed}
+                type={this.state.type}
+                handleShapeClick={this.handleShapeClick}
+              />
+
+              : null}
 
           </Grid.Column>
         </Grid.Row>
