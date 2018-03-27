@@ -3,11 +3,11 @@ import { Button, Card, Grid } from 'semantic-ui-react'
 import Slider from 'react-rangeslider'
 
 class FrequencySlider extends Component {
-  constructor (props, context) {
-    super(props, context)
+  constructor(props,context){
+    super(props,context);
     this.state = {
-      frequency: props.frequency,
-      gain: props.gain
+      frequency: 50,
+      gain: 50,
     }
   }
 
@@ -25,29 +25,36 @@ class FrequencySlider extends Component {
     this.props.changeGain(value)
   }
 
-  render () {
+  componentWillUnmount() {
+    console.log("FREQDETUNE UNMOUNTING");
+  }
+  componentDidMount(){
+    console.log("FREQDETUNE MOUNTED");
+  }
 
-    const { frequency, gain } = this.state
+  render () {
+    console.log("FREQ/DETUNE PROPS: ", this.props)
     const formatPc = p => p + '%'
 
     return (
+
       <Grid textAlign='center' columns={2}>
         <Grid.Column>
           <div className='slider custom-labels'>
             <Slider
-              value={frequency}
+              value={this.state.frequency}
               orientation='vertical'
-
+              
               onChange={this.handleChangeFrequency}
             />
-            <div className='value'>{formatPc(this.state.frequency)}</div>
+          <div className='value'>{formatPc(this.state.frequency)}</div>
             <div>Frequency</div>
           </div>
         </Grid.Column>
         <Grid.Column>
           <div className='slider custom-labels'>
             <Slider
-              value={gain}
+              value={this.state.gain}
               orientation='vertical'
 
               onChange={this.handleChangeGain}
@@ -57,6 +64,7 @@ class FrequencySlider extends Component {
           </div>
         </Grid.Column>
       </Grid>
+
     )
   }
 }

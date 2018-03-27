@@ -18,49 +18,58 @@ const uuidv1 = require('uuid/v1'); // uuidv1();
 // change anything (see pause and distortion states with booleans)
 
 class ControlPanelContainer extends Component {
-  constructor(props){
-    super(props);
+  // constructor(props){
+  //   super(props);
+  //
+  //   this.state = {
+  //     name: "",
+  //     sound: "",
+  //     type: "",
+  //     frequency: 50,
+  //     gain: 50,
+  //     distortion: 0,
+  //     paused: true,
+  //     highPass: 800,
+  //     lowPass: 880,
+  //     highShelf: 4700,
+  //     lowShelf: 35,
+  //   }
+  // }
 
-    this.state = {
-      name: props.values.name,
-      sound: "",
-      type: props.values.type,
-      frequency: props.values.frequency,
-      gain: props.values.gain,
-      distortion: props.values.distortion,
-      paused: true,
-      // highPass: 800,
-      // lowPass: 880,
-      // highShelf: 4700,
-      // lowShelf: 35,
-    }
+
+  componentDidMount = () => {
+    console.log(`CONTROLPANEL ${this.props.values.name} MOUNTED`)
   }
-
-
 
   chooseType = (type) => {
+    
     console.log("1. ControlPanel - Type Choice: ", type)
+    let newObj = this.props.values
+    newObj.type = type
 
-    this.setState({
-      type: type,
-    }, ()=>{this.playSound()})
+    this.props.updateControlObjs(newObj)
+    this.playSound()
   }
-
 
   playSound = () => {
     console.log("ControlPanel - Hit play")
+    // this.props.sendSoundShape(this.props.values.type)
+
     let context = this.props.context
     let sound = new Sound(context)
     let now = context.currentTime;
 
-    sound.play(this.state.type, this.state.frequency)
+    let newObj = this.props.values
+    newObj.sound = sound
+    newObj.paused = false
+    this.props.updateControlObjs(newObj)
 
-    let paused = !this.state.paused
+    sound.play(this.props.values.type, this.props.values.frequency)
 
-    this.setState({
-      paused: paused,
-      sound: sound
-    }, ()=>{console.log("Control - Play hit. Pause state: ", this.state.paused, "Type state:", this.state.type)})
+    // this.setState({
+    //   sound: sound
+    // })
+
   }
 
   pauseSound = () => {
@@ -70,42 +79,46 @@ class ControlPanelContainer extends Component {
     let now = context.currentTime
     sound.stop(now)
 
-    let paused = !this.state.paused
+    let paused = true
+
+    let newObj = this.props.values
+    newObj.paused = true
+    this.props.updateControlObjs(newObj)
 
     this.setState({
       sound: "",
-      paused: paused
-    }, ()=>{console.log("Control - Pause hit. Pause state: ",this.state.paused, "Type state:",this.state.type)})
+    })
   }
 
 
 // SLIDERS ---------->
 
   handleFreqSlider = (e) => {
-    console.log("Control - Gain Slider: ", e)
-    this.setState({
-      frequency: e
-    })
 
-    if(this.state.sound){
+    if(this.props.values.sound){
+      console.log("Control - Freq Slider: ", e)
       let num = e * 5
-      let sound = this.state.sound
+      let sound = this.props.values.sound
+
+      let newObj = this.props.values
+      newObj.frequency = e
+      this.props.updateControlObjs(newObj)
 
       sound.changeFreqVal(num)
+      this.props.handleSliderSpeed(e)
     }
-    // this.props.sendSound(this.state.type,this.state.frequency)
-    // this.props.handleSliderSpeed(this.state.frequency)
   }
 
   handleGainSlider = (e) => {
-    console.log("Control - Gain Slider: ", e)
-    this.setState({
-      gain: e
-    })
 
-    if(this.state.sound){
+    if(this.props.values.sound){
+      console.log("Control - Gain Slider: ", e)
       let num = e/25
-      let sound = this.state.sound
+      let sound = this.props.values.sound
+
+      let newObj = this.props.values
+      newObj.gain = e
+      this.props.updateControlObjs(newObj)
 
       sound.changeGainVal(num)
     }
@@ -113,13 +126,14 @@ class ControlPanelContainer extends Component {
 
   handleDistSlider = (e) => {
     console.log("Control - Dist Slider: ", e)
-    this.setState({
-      distortion: e
-    })
 
-    if(this.state.sound){
-      let sound = this.state.sound
+    if(this.props.values.sound){
+      let sound = this.props.values.sound
       let num = e
+
+      let newObj = this.props.values
+      newObj.distortion = e
+      this.props.updateControlObjs(newObj)
 
       sound.changeDistVal(num)
     }
@@ -131,8 +145,8 @@ class ControlPanelContainer extends Component {
 // RENDERING INPUTS --------------->
 
   buildPlayPause = () => {
-    if(this.state.type){
-      if(this.state.paused){
+    if(this.props.values.type){
+      if(this.props.values.paused){
         return <PlayButton playSound={this.playSound} />
       } else {
         return <PauseButton pauseSound={this.pauseSound} />
@@ -143,9 +157,9 @@ class ControlPanelContainer extends Component {
   }
 
   render(){
-    console.log("Control Panel: ", this.state.name, "RENDERED")
+    console.log("Control Panel: ", this.props.values.name, "RENDERED")
 
-    this.props.updateControlObjs(this.state)
+
 
     return(
     <Grid celled="internally" >
@@ -159,8 +173,8 @@ class ControlPanelContainer extends Component {
       <Grid.Row>
         <Grid.Column>
 
-          {this.state.type ?
-            <OscChoice type={this.state.type} />
+          {this.props.values.type ?
+            <OscChoice type={this.props.values.type} />
             :
             <OscTypeButton chooseType={this.chooseType}/>
           }
@@ -172,8 +186,10 @@ class ControlPanelContainer extends Component {
           <FreqDetuneSliders
             changeFrequency={this.handleFreqSlider}
             changeGain={this.handleGainSlider}
-            frequency={this.state.frequency}
-            gain={this.state.gain}/>
+
+            frequency={this.props.values.frequency}
+            gain={this.props.values.gain}
+            />
 
         </Grid.Column>
       </Grid.Row>
@@ -182,7 +198,7 @@ class ControlPanelContainer extends Component {
 
           <DistortionSlider
             changeDistortion={this.handleDistSlider}
-            distortion={this.state.distortion}
+            distortion={this.props.values.distortion}
             />
 
         </Grid.Column>

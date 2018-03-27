@@ -12,7 +12,7 @@ class ShapeContainer extends Component {
   }
 
   setShape = () => {
-    console.log(this.props.type)
+    console.log("In ShapeContainer: ", this.props.type)
     switch(this.props.type){
 
       case "triangle":
