@@ -6,87 +6,71 @@ import DistortionSlider from '../Components/Inputs/DistortionSlider'
 import PlayButton from '../Components/Inputs/PlayPauseReset/PlayButton'
 import PauseButton from '../Components/Inputs/PlayPauseReset/PauseButton'
 import OscChoice from '../Components/OscChoice'
-
 import Sound from '../Sound.js'
 const uuidv1 = require('uuid/v1'); // uuidv1();
 
-// import SetSoundsButton from '../Components/Inputs/SetSoundsButton'
-// import PlayButton from '../Components/Inputs/PlayButton'
-// import LowMidHighKnobs from '../Components/Inputs/LowMidHighKnobs'
-
-// Having a bigger issues with toggles turning back to their initial state when I
-// change anything (see pause and distortion states with booleans)
-
 class ControlPanelContainer extends Component {
-  // constructor(props){
-  //   super(props);
-  //
-  //   this.state = {
-  //     name: "",
-  //     sound: "",
-  //     type: "",
-  //     frequency: 50,
-  //     gain: 50,
-  //     distortion: 0,
-  //     paused: true,
-  //     highPass: 800,
-  //     lowPass: 880,
-  //     highShelf: 4700,
-  //     lowShelf: 35,
-  //   }
-  // }
+  constructor(props){
+    super(props);
 
-
-  componentDidMount = () => {
-    console.log(`CONTROLPANEL ${this.props.values.name} MOUNTED`)
+    this.state = {
+      sound: "",
+      type: props.type,
+      frequency: 50,
+      gain: 50,
+      distortion: 0,
+      paused: true
+    }
   }
 
-  chooseType = (type) => {
-    
-    console.log("1. ControlPanel - Type Choice: ", type)
-    let newObj = this.props.values
-    newObj.type = type
 
-    this.props.updateControlObjs(newObj)
+  chooseType = (type) => {
+    // console.log("1. ControlPanel - Type Choice: ", type)
+
+    // this.setState({
+    //   "type": type
+    // }, ()=>{})
+
+    this.props.chooseType(type)
     this.playSound()
+  }
+
+  componentDidMount(){
+    console.log("updated: ", this.state.type)
   }
 
   playSound = () => {
     console.log("ControlPanel - Hit play")
-    // this.props.sendSoundShape(this.props.values.type)
+    // this.props.sendSoundShape(this.state.type)
 
     let context = this.props.context
     let sound = new Sound(context)
     let now = context.currentTime;
+    let paused = false
 
-    let newObj = this.props.values
-    newObj.sound = sound
-    newObj.paused = false
-    this.props.updateControlObjs(newObj)
-
-    sound.play(this.props.values.type, this.props.values.frequency)
+    sound.play(this.props.type, this.state.frequency)
 
     // this.setState({
-    //   sound: sound
-    // })
+    //   sound: sound,
+    //   paused
+    // }, ()=>{this.props.sound})
+
+    this.props.getSound(sound)
 
   }
 
   pauseSound = () => {
     console.log("Control - Hit pause")
-    let sound = this.state.sound
+    let sound = this.props.sound
     let context = this.props.context
     let now = context.currentTime
     sound.stop(now)
 
     let paused = true
 
-    let newObj = this.props.values
-    newObj.paused = true
-    this.props.updateControlObjs(newObj)
-
     this.setState({
       sound: "",
+      paused
     })
   }
 
@@ -95,45 +79,45 @@ class ControlPanelContainer extends Component {
 
   handleFreqSlider = (e) => {
 
-    if(this.props.values.sound){
+    if(this.props.sound){
+      console.log(this.props.sound)
       console.log("Control - Freq Slider: ", e)
       let num = e * 5
-      let sound = this.props.values.sound
-
-      let newObj = this.props.values
-      newObj.frequency = e
-      this.props.updateControlObjs(newObj)
+      let sound = this.props.sound
 
       sound.changeFreqVal(num)
-      this.props.handleSliderSpeed(e)
+      this.props.handleSliderSpeedX(e)
+
+      this.setState({
+        frequency: e
+      })
     }
   }
 
   handleGainSlider = (e) => {
 
-    if(this.props.values.sound){
+    if(this.props.sound){
       console.log("Control - Gain Slider: ", e)
       let num = e/25
-      let sound = this.props.values.sound
-
-      let newObj = this.props.values
-      newObj.gain = e
-      this.props.updateControlObjs(newObj)
+      let sound = this.props.sound
 
       sound.changeGainVal(num)
+      this.props.handleSliderSpeedY(e)
+
+      this.setState({
+        gain: e
+      })
     }
   }
 
   handleDistSlider = (e) => {
     console.log("Control - Dist Slider: ", e)
 
-    if(this.props.values.sound){
-      let sound = this.props.values.sound
+    if(this.props.sound){
+      let sound = this.props.sound
       let num = e
 
-      let newObj = this.props.values
-      newObj.distortion = e
-      this.props.updateControlObjs(newObj)
+      this.props.handleSliderSpeedW(e)
 
       sound.changeDistVal(num)
     }
@@ -145,8 +129,9 @@ class ControlPanelContainer extends Component {
 // RENDERING INPUTS --------------->
 
   buildPlayPause = () => {
-    if(this.props.values.type){
-      if(this.props.values.paused){
+    if(this.state.type){
+      console.log("BuildPlayPause: ", this.state.type)
+      if(this.props.paused){
         return <PlayButton playSound={this.playSound} />
       } else {
         return <PauseButton pauseSound={this.pauseSound} />
@@ -157,10 +142,7 @@ class ControlPanelContainer extends Component {
   }
 
   render(){
-    console.log("Control Panel: ", this.props.values.name, "RENDERED")
-
-
-
+    console.log("RENDER Type: ", this.state.type)
     return(
     <Grid celled="internally" >
       <Grid.Row>
@@ -173,10 +155,10 @@ class ControlPanelContainer extends Component {
       <Grid.Row>
         <Grid.Column>
 
-          {this.props.values.type ?
-            <OscChoice type={this.props.values.type} />
+          {this.state.type ?
+            <OscChoice type={this.state.type} />
             :
-            <OscTypeButton chooseType={this.chooseType}/>
+            <OscTypeButton chooseType={this.chooseType} />
           }
         </Grid.Column>
       </Grid.Row>
@@ -186,9 +168,6 @@ class ControlPanelContainer extends Component {
           <FreqDetuneSliders
             changeFrequency={this.handleFreqSlider}
             changeGain={this.handleGainSlider}
-
-            frequency={this.props.values.frequency}
-            gain={this.props.values.gain}
             />
 
         </Grid.Column>
@@ -198,7 +177,6 @@ class ControlPanelContainer extends Component {
 
           <DistortionSlider
             changeDistortion={this.handleDistSlider}
-            distortion={this.props.values.distortion}
             />
 
         </Grid.Column>
@@ -215,63 +193,3 @@ class ControlPanelContainer extends Component {
 }
 
 export default ControlPanelContainer
-
-
-// handleLowPassKnob = (num) => {
-//   if(this.state.sound){
-//     let sound = this.state.sound
-//     let type = "lowPass"
-//
-//     console.log("LowPass Slider Num: ", num)
-//
-//     sound.changeLowPassVal(num)
-//
-//     this.setState({
-//       lowPass: num
-//     }, ()=>{console.log("LowPass val: ", this.state.lowPass)})
-//   }
-// }
-//
-// handleHighPassKnob = (num) => {
-//   if(this.state.sound){
-//     let sound = this.state.sound
-//     let type = "highPass"
-//
-//     console.log("HighPass Slider Num: ", num)
-//
-//     sound.changeHighPassVal(num)
-//
-//     this.setState({
-//       highPass: num
-//     }, ()=>{console.log("HighPass val: ", this.state.highPass)})
-//   }
-// }
-//
-// handleLowShelfKnob = (num) => {
-//   if(this.state.sound){
-//     let sound = this.state.sound
-//     let type = "lowShelf"
-//
-//     console.log("LowShelf Slider Num: ", num)
-//
-//     sound.changeLowShelfVal(num)
-//
-//     this.setState({
-//       lowShelf: num
-//     }, ()=>{console.log("LowShelf val: ", this.state.lowShelf)})
-//   }
-// }
-//
-// handleHighShelfKnob = (num) => {
-//   if(this.state.sound){
-//     let sound = this.state.sound
-//
-//     console.log("HighShelf Slider Num: ", num)
-//
-//     sound.changeHighShelfVal(num)
-//
-//     this.setState({
-//       highShelf: num
-//     }, ()=>{console.log("HighShelf val: ", this.state.highShelf)})
-//   }
-// }

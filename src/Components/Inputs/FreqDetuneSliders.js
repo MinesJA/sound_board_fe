@@ -33,7 +33,6 @@ class FrequencySlider extends Component {
   }
 
   render () {
-    console.log("FREQ/DETUNE PROPS: ", this.props)
     const formatPc = p => p + '%'
 
     return (
@@ -44,7 +43,8 @@ class FrequencySlider extends Component {
             <Slider
               value={this.state.frequency}
               orientation='vertical'
-              
+              format={formatPc}
+
               onChange={this.handleChangeFrequency}
             />
           <div className='value'>{formatPc(this.state.frequency)}</div>
@@ -56,6 +56,7 @@ class FrequencySlider extends Component {
             <Slider
               value={this.state.gain}
               orientation='vertical'
+              format={formatPc}
 
               onChange={this.handleChangeGain}
             />

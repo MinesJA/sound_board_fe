@@ -22,8 +22,8 @@ class ConeShape extends React.Component {
       // React will be sure that the rotation has now updated.
       this.setState({
         coneRotation: new THREE.Euler(
-          this.state.coneRotation.x + 0.01,
-          this.state.coneRotation.y + 0.01,
+          this.state.coneRotation.x + this.props.shapeSpeedY/10,
+          this.state.coneRotation.y + this.props.shapeSpeedX/10,
           0
         ),
       });
@@ -33,7 +33,7 @@ class ConeShape extends React.Component {
   render() {
     const width = window.innerWidth * 0.75; // canvas width
     const height = window.innerHeight * 0.75; // canvas height
-let depth = this.props.shapeSpeed/10
+// let depth = this.props.shapeSpeedW/10
     return (<React3
       mainCamera="camera" // this points to the perspectiveCamera which has the name set to "camera" below
       width={width}
@@ -55,7 +55,7 @@ let depth = this.props.shapeSpeed/10
           rotation={this.state.coneRotation}
         >
         <sphereGeometry
-             radius={depth}
+             radius={this.props.shapeSpeedW/10}
              widthSegments={20}
              heightSegments={10}
            />

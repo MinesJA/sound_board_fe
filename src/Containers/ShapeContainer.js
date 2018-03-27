@@ -16,15 +16,27 @@ class ShapeContainer extends Component {
     switch(this.props.type){
 
       case "triangle":
-        return(<PyramidShape onClick={this.handleClick} shapeSpeed={this.props.shapeSpeed} />)
+        return(<PyramidShape
+          shapeSpeedX={this.props.shapeSpeedX}
+          shapeSpeedY={this.props.shapeSpeedY}
+          shapeSpeedW={this.props.shapeSpeedW}
+           />)
       break;
 
       case "sine":
-        return(<TorusShape shapeSpeed={this.props.shapeSpeed}/>)
+        return(<TorusShape
+          shapeSpeedX={this.props.shapeSpeedX}
+          shapeSpeedY={this.props.shapeSpeedY}
+          shapeSpeedW={this.props.shapeSpeedW}
+          />)
       break;
 
       case "sawtooth":
-        return(<ConeShape shapeSpeed={this.props.shapeSpeed}/>)
+        return(<ConeShape
+          shapeSpeedX={this.props.shapeSpeedX}
+          shapeSpeedY={this.props.shapeSpeedY}
+          shapeSpeedW={this.props.shapeSpeedW}
+          />)
       break;
 
       default:
@@ -35,7 +47,7 @@ class ShapeContainer extends Component {
 
   render() {
     return (
-      <div onClick={this.handleClick}>
+      <div>
       {this.setShape()}
       </div>
     )

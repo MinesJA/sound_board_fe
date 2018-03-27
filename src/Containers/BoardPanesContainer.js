@@ -6,41 +6,24 @@ const uuidv1 = require('uuid/v1'); // use like => uuidv1();
 
 class BoardPanesContainer extends Component {
 
-  // buildControlPanels = () => {
-  //   return this.props.controlObjs.map(
-  //     (obj)=>{
-  //       return { menuItem: `${obj.name}`, render: () =>
-  //                 <Tab.Pane>
-  //                   <ControlPanelContainer
-  //                     key={uuidv1()}
-  //                     values={obj}
-  //                     context={this.props.context}
-  //                     updateControlObjs = {this.props.updateControlObjs}
-  //
-  //
-  //
-  //                     newFrequency={this.props.newFrequency}
-  //                     handleSliderSpeed={this.props.handleSliderSpeed}
-  //                     sendSoundShape={this.props.handleSoundShape}
-  //                     chooseType={this.props.chooseType}
-  //                     />
-  //                 </Tab.Pane>
-  //       }
-  //     }
-  //   )
-  // }
 
-  let panes = [
+
+  panes = () => [
     { menuItem: `1`, render: () =>
               <Tab.Pane>
                 <ControlPanelContainer
                   key={uuidv1()}
-                  values={obj}
+
                   context={this.props.context}
-                  newFrequency={this.props.newFrequency}
-                  handleSliderSpeed={this.props.handleSliderSpeed}
-                  sendSoundShape={this.props.handleSoundShape}
+                  type={this.props.type}
+                  handleSliderSpeedX={this.props.handleSliderSpeedX}
+                  handleSliderSpeedY={this.props.handleSliderSpeedY}
+                  handleSliderSpeedW={this.props.handleSliderSpeedW}
+                  getSound={this.props.getSound}
+                  sound={this.props.sound}
+
                   chooseType={this.props.chooseType}
+
                   />
               </Tab.Pane>
     },
@@ -48,12 +31,17 @@ class BoardPanesContainer extends Component {
               <Tab.Pane>
                 <ControlPanelContainer
                   key={uuidv1()}
-                  values={obj}
+
                   context={this.props.context}
-                  newFrequency={this.props.newFrequency}
-                  handleSliderSpeed={this.props.handleSliderSpeed}
-                  sendSoundShape={this.props.handleSoundShape}
+                  type={this.props.type}
+                  handleSliderSpeedX={this.props.handleSliderSpeedX}
+                  handleSliderSpeedY={this.props.handleSliderSpeedY}
+                  handleSliderSpeedW={this.props.handleSliderSpeedW}
+                  getSound={this.props.getSound}
+                  sound={this.props.sound}
+
                   chooseType={this.props.chooseType}
+
                   />
               </Tab.Pane>
     },
@@ -61,14 +49,21 @@ class BoardPanesContainer extends Component {
               <Tab.Pane>
                 <ControlPanelContainer
                   key={uuidv1()}
+
                   context={this.props.context}
-                  newFrequency={this.props.newFrequency}
-                  handleSliderSpeed={this.props.handleSliderSpeed}
-                  sendSoundShape={this.props.handleSoundShape}
+                  type={this.props.type}
+                  handleSliderSpeedX={this.props.handleSliderSpeedX}
+                  handleSliderSpeedY={this.props.handleSliderSpeedY}
+                  handleSliderSpeedW={this.props.handleSliderSpeedW}
+                  getSound={this.props.getSound}
+                  sound={this.props.sound}
+
                   chooseType={this.props.chooseType}
+
                   />
               </Tab.Pane>
     }
+
 
   ]
 
@@ -81,7 +76,7 @@ class BoardPanesContainer extends Component {
   render(){
     return(
       <div>
-        <Tab panes={panes}  />
+        <Tab panes={this.panes()}  />
         <Button onClick={this.addPanel} size={"small"} >Add New Control Panel</Button>
       </div>
     )

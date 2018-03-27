@@ -22,11 +22,11 @@ class PyramidShape extends React.Component {
       // pretend pyramidRotation is immutable.
       // this helps with updates and pure rendering.
       // React will be sure that the rotation has now updated.
-      let rotate = this.props.shapeSpeed/400
+      // let rotate = this.props.shapeSpeed/400
       this.setState({
         pyramidRotation: new THREE.Euler(
-          this.state.pyramidRotation.x + 0.1,
-          this.state.pyramidRotation.y + rotate,
+          this.state.pyramidRotation.x + this.props.shapeSpeedX/400,
+          this.state.pyramidRotation.y + this.props.shapeSpeedY/400,
           0
         ),
       });

@@ -20,11 +20,11 @@ class TorusShape extends Component {
       // pretend torusRotation is immutable.
       // this helps with updates and pure rendering.
       // React will be sure that the rotation has now updated.
-      let rotate = this.props.shapeSpeed/300
+      // let rotate = this.props.shapeSpeedX/300
       this.setState({
         torusRotation: new THREE.Euler(
-          this.state.torusRotation.x + rotate,
-          this.state.torusRotation.y + rotate,
+          this.state.torusRotation.x + this.props.shapeSpeedX/300,
+          this.state.torusRotation.y + this.props.shapeSpeedY/300,
           0
         ),
       });

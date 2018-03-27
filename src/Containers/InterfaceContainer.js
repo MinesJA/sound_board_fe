@@ -40,92 +40,99 @@ class InterfaceContainer extends Component {
     state = {
       context: new (window.AudioContext || window.webkitAudioContext)(),
       counter: 4,
-      sound: "",
       type: "",
-      frequency: 50,
-      gain: 50,
-      distortion: 0,
-      paused: true
+      speedX: 50,
+      speedY: 50,
+      speedW: 50,
+      sound: ""
     }
+
 
     handleSoundShape = (type) =>{
       this.setState({
-        type: type,
+        type,
       })
     }
 
-    handleSliderSpeed = (frequency) =>{
+    handleSliderSpeedX = (value) =>{
       this.setState({
-        shapeSpeed:frequency
+        speedX:value
       })
     }
-
-    handleShapeClick = (e) => {
-      let newFrequency = this.state.shapeSpeed + 10
+    handleSliderSpeedY = (value) =>{
       this.setState({
-        shapeSpeed: newFrequency
+        speedY:value
+      })
+    }
+    handleSliderSpeedW = (value) =>{
+      this.setState({
+        speedW:value
       })
     }
 
-    
+    getSound = (sound) => {
+      this.setState({
+        sound: sound
+      })
+    }
 
-  addPanel = (e) => {
-    let counter = this.state.counter + 1
 
-    let obj =  {name: counter,
-                type: "",
-                frequency: 50,
-                gain: 50,
-                distortion: 0}
 
-    let panelsArray = [...this.state.controlObjs]
-    panelsArray.push(obj)
-
-    this.setState({
-      controlObjs: panelsArray,
-      counter: counter
-    }, ()=>{console.log("Current ControlPanels Array: ", this.state.panelsArray)})
-  }
-
-  updateControlObjs = (contObj) => {
-
-    let oldContObjs = [...this.state.controlObjs]
-    console.log("Old Array: ", oldContObjs)
-    console.log("New Obj: ", contObj)
-
-    let contMatch = oldContObjs.find(
-      (obj)=>{return obj.name === contObj.name}
-      )
-
-    let index = oldContObjs.indexOf(contMatch)
-
-    oldContObjs[index] = contObj
-
-    this.setState({
-      controlObjs: oldContObjs
-    },()=>{console.log("This is the new Interface state: ", this.state.controlObjs)})
-  }
+  // addPanel = (e) => {
+  //   let counter = this.state.counter + 1
+  //
+  //   let obj =  {name: counter,
+  //               type: "",
+  //               frequency: 50,
+  //               gain: 50,
+  //               distortion: 0}
+  //
+  //   let panelsArray = [...this.state.controlObjs]
+  //   panelsArray.push(obj)
+  //
+  //   this.setState({
+  //     controlObjs: panelsArray,
+  //     counter: counter
+  //   }, ()=>{console.log("Current ControlPanels Array: ", this.state.panelsArray)})
+  // }
+  //
+  // updateControlObjs = (contObj) => {
+  //
+  //   let oldContObjs = [...this.state.controlObjs]
+  //   console.log("Old Array: ", oldContObjs)
+  //   console.log("New Obj: ", contObj)
+  //
+  //   let contMatch = oldContObjs.find(
+  //     (obj)=>{return obj.name === contObj.name}
+  //     )
+  //
+  //   let index = oldContObjs.indexOf(contMatch)
+  //
+  //   oldContObjs[index] = contObj
+  //
+  //   this.setState({
+  //     controlObjs: oldContObjs
+  //   },()=>{console.log("This is the new Interface state: ", this.state.controlObjs)})
+  // }
 
 
 
   render(){
-
-
-
     return(
       <Grid celled='internally'>
         <Grid.Row>
           <Grid.Column width={5} >
-
             <BoardPanesContainer
-              controlObjs={this.state.controlObjs}
-              addPanel={this.addPanel}
-              updateControlObjs = {this.updateControlObjs}
-
-              clickedFrequency = {this.state.shapeSpeed}
               handleSoundShape = {this.handleSoundShape}
-              handleSliderSpeed = {this.handleSliderSpeed}
+              handleSliderSpeedX = {this.handleSliderSpeedX}
+              handleSliderSpeedY = {this.handleSliderSpeedY}
+              handleSliderSpeedW = {this.handleSliderSpeedW}
+              chooseType={this.handleSoundShape}
+              getSound={this.getSound}
               context = {this.state.context}
+
+              type={this.state.type}
+              sound={this.state.sound}
             />
 
           </Grid.Column>
@@ -134,9 +141,11 @@ class InterfaceContainer extends Component {
             {this.state.type ?
 
               <ShapeContainer
-                shapeSpeed={this.state.shapeSpeed}
+                shapeSpeedX={this.state.speedX}
+                shapeSpeedY={this.state.speedY}
+                shapeSpeedW={this.state.speedW}
+
                 type={this.state.type}
-                handleShapeClick={this.handleShapeClick}
               />
 
               : null}

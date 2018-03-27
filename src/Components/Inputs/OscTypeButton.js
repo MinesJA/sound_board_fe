@@ -7,7 +7,10 @@ const OscTypeButton = (props) => {
   const handleClick = (e) => {
     console.log("OscType - clicked type: ", e.target.name)
     props.chooseType(e.target.name)
+    // props.getChoice(e.target.name)
   }
+
+
 
 
     return(
