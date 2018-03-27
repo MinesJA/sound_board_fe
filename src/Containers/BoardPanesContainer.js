@@ -15,6 +15,7 @@ class BoardPanesContainer extends Component {
         frequency: 25,
         gain: 25,
         distortion: 0,
+        sound: "",
         paused: true
       },
       {
@@ -23,6 +24,7 @@ class BoardPanesContainer extends Component {
         frequency: 15,
         gain: 32,
         distortion: 28,
+        sound: "",
         paused: true
       },
       {
@@ -31,6 +33,7 @@ class BoardPanesContainer extends Component {
         frequency: 50,
         gain: 47,
         distortion: 15,
+        sound: "",
         paused: true
       },
     ]
@@ -64,13 +67,23 @@ class BoardPanesContainer extends Component {
 
   updateControlObjs = (contObj) => {
     let controlArray = [...this.state.controlObjs]
+    console.log("Old Array: ", controlArray)
+    console.log("New Obj: ", contObj)
 
+    
 
+    var objMatch = controlArray.find(
+      (obj)=>{return obj.name === contObj.name}
+    )
 
-
+    this.setState({
+      objMatch
+    })
 
 
   }
+
+
 
 
   addPanel = (e) => {

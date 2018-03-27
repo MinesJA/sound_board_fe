@@ -36,10 +36,6 @@ class ControlPanelContainer extends Component {
     }
   }
 
-  componentDidMount = () => {
-    console.log(this.state)
-  }
-
 
 
   chooseType = (type) => {
